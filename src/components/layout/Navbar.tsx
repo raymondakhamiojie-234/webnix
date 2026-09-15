@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -22,8 +23,8 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="text-2xl font-bold text-foreground">
-              WEBNIX
+            <Link href="/" className="flex items-center">
+              <Image src="/logo.png" alt="Webnics Logo" width={120} height={120} className="w-auto h-10 object-contain" />
             </Link>
           </div>
           

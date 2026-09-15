@@ -1,5 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -9,8 +10,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <Link href="/" className="text-2xl font-bold mb-4 block">
-              WEBNIX
+            <Link href="/" className="mb-6 block">
+              <Image src="/logo.png" alt="Webnics Logo" width={150} height={150} className="w-auto h-14 object-contain" />
             </Link>
             <p className="text-sm text-gray-400 mb-4">
               Your Website, Your Rules. We Just Make It HAPPEN. From full-service web creation to expert 1-on-1 training.
