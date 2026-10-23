@@ -1,21 +1,47 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
-  --primary: #a855f7;
+  --background: #f8fafc;
+  --foreground: #090d16;
+  --primary: #c026d3;
   --primary-foreground: #ffffff;
-  --secondary: #e879f9;
+  --secondary: #3b82f6;
   --secondary-foreground: #ffffff;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
-  --muted: #1e293b;
+  --accent: #f1f5f9;
+  --accent-foreground: #7c3aed;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --border: rgba(15, 23, 42, 0.1);
+  --card: rgba(255, 255, 255, 0.85);
+  --card-foreground: #090d16;
+  --popover: #ffffff;
+  --popover-foreground: #090d16;
+  --grid-line: rgba(15, 23, 42, 0.04);
+  --glow-primary: rgba(192, 38, 211, 0.15);
+  --glow-secondary: rgba(59, 130, 246, 0.15);
+}
+
+.dark {
+  --background: #030305;
+  --foreground: #ffffff;
+  --primary: #d946ef;
+  --primary-foreground: #ffffff;
+  --secondary: #3b82f6;
+  --secondary-foreground: #ffffff;
+  --accent: #0f1422;
+  --accent-foreground: #e879f9;
+  --muted: rgba(255, 255, 255, 0.05);
   --muted-foreground: #94a3b8;
-  --border: #334155;
-  --card: #0f172a;
-  --card-foreground: #f8fafc;
-  --popover: #0f172a;
-  --popover-foreground: #f8fafc;
+  --border: rgba(255, 255, 255, 0.1);
+  --card: rgba(10, 12, 18, 0.65);
+  --card-foreground: #ffffff;
+  --popover: #0a0c12;
+  --popover-foreground: #ffffff;
+  --grid-line: rgba(255, 255, 255, 0.04);
+  --glow-primary: rgba(217, 70, 239, 0.25);
+  --glow-secondary: rgba(59, 130, 246, 0.25);
 }
 
 @theme inline {
@@ -34,35 +60,93 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-
-/* Default theme is now dark. Added this media query for light mode override if ever needed */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #ffffff;
-    --foreground: #1e1b4b;
-    --primary: #9333ea;
-    --secondary: #d946ef;
-    --accent: #f3e8ff;
-    --accent-foreground: #6b21a8;
-    --muted: #f1f5f9;
-    --muted-foreground: #64748b;
-    --border: #e2e8f0;
-    --card: #ffffff;
-    --card-foreground: #1e1b4b;
-    --popover: #ffffff;
-    --popover-foreground: #1e1b4b;
-  }
+  --font-sans: var(--font-space), "Inter", sans-serif;
+  --font-space: var(--font-space-grotesk), "Space Grotesk", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-space);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Cyber grid background matching tech-summit-six */
+.cyber-grid {
+  background-image: linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Glassmorphism styling */
+.glass {
+  background-color: var(--card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-hover:hover {
+  border-color: rgba(217, 70, 239, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Bento card styling */
+.bento-card {
+  border-radius: 1.5rem;
+  background-color: var(--card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bento-card:hover {
+  border-color: rgba(217, 70, 239, 0.45);
+  box-shadow: 0 10px 30px -10px var(--glow-primary);
+  transform: translateY(-3px);
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 30%, #d946ef 70%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.light .text-gradient {
+  background: linear-gradient(135deg, #090d16 30%, #c026d3 70%, #2563eb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Glowing blob animations */
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -40px) scale(1.08); }
+  66% { transform: translate(-25px, 20px) scale(0.92); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 8s infinite ease-in-out;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
 }
 
 /* Smooth scrolling */

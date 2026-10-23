@@ -1,10 +1,10 @@
 "use client"
 import { useState } from "react"
 import { Section } from "@/components/ui/section"
-import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { Sparkles, Send, CheckCircle2, MessageCircle, ShieldCheck } from "lucide-react"
 
 export function LeadForm() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle")
@@ -42,83 +42,154 @@ export function LeadForm() {
   }
 
   return (
-    <Section id="contact" className="bg-accent/20">
+    <Section id="contact" className="relative z-10 pb-28">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-10 space-y-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">Get a Free Quote</h2>
-          <p className="text-lg text-muted-foreground">Tell us about your project and we'll get back to you with a tailored proposal.</p>
+        <div className="text-center mb-12 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-primary/30 bg-primary/10 text-xs font-semibold uppercase tracking-widest text-primary backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Start Your Project</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-5xl font-bold font-space tracking-tight text-foreground">
+            Let's Make It <span className="text-gradient">Happen</span>
+          </h2>
+          
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            Tell us about your project requirements. Receive a comprehensive roadmap, technical breakdown, and custom quote within 24 hours.
+          </p>
         </div>
 
-        <Card className="border-none shadow-xl">
-          <CardContent className="p-8">
-            {status === "success" ? (
-              <div className="text-center py-16 space-y-4">
-                <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto text-4xl mb-4">
-                  ✓
-                </div>
-                <h3 className="text-2xl font-bold">Request Received!</h3>
-                <p className="text-muted-foreground">Thank you for reaching out. We will contact you within 24 hours.</p>
-                <Button onClick={() => setStatus("idle")} variant="outline" className="mt-8">
-                  Submit another request
-                </Button>
+        <div className="bento-card p-6 sm:p-10 shadow-2xl relative">
+          {status === "success" ? (
+            <div className="text-center py-16 space-y-6">
+              <div className="w-20 h-20 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-4xl shadow-[0_0_30px_rgba(16,185,129,0.2)]">
+                <CheckCircle2 className="w-10 h-10" />
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Full Name</label>
-                    <Input name="fullName" required placeholder="John Doe" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Business Name (Optional)</label>
-                    <Input name="businessName" placeholder="Acme Inc" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Email Address</label>
-                    <Input name="email" required type="email" placeholder="john@example.com" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Phone / WhatsApp</label>
-                    <Input name="phone" required type="tel" placeholder="+234..." />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Website Type</label>
-                    <select name="websiteType" className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                      <option value="">Select an option...</option>
-                      <option value="business">Business Website</option>
-                      <option value="ecommerce">E-commerce</option>
-                      <option value="corporate">Corporate</option>
-                      <option value="custom">Custom Web App</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Estimated Budget</label>
-                    <select name="budget" className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
-                      <option value="">Select an option...</option>
-                      <option value="under_100k">Under ₦100,000</option>
-                      <option value="100k_250k">₦100,000 - ₦250,000</option>
-                      <option value="250k_500k">₦250,000 - ₦500,000</option>
-                      <option value="500k_1m">₦500,000 - ₦1,000,000</option>
-                      <option value="1m_plus">₦1,000,000+</option>
-                      <option value="not_sure">Not sure</option>
-                    </select>
-                  </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl sm:text-3xl font-bold font-space text-foreground">Project Inquiry Received!</h3>
+                <p className="text-muted-foreground max-w-md mx-auto">
+                  Thank you for reaching out. One of our lead engineers will review your specs and contact you within 24 hours.
+                </p>
+              </div>
+              <Button 
+                onClick={() => setStatus("idle")} 
+                variant="outline" 
+                className="rounded-full px-6 border-border"
+              >
+                Submit another inquiry
+              </Button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Full Name *</label>
+                  <Input 
+                    name="fullName" 
+                    required 
+                    placeholder="e.g. Alexander Vance" 
+                    className="h-12 rounded-xl bg-muted/40 border-border/80 focus:border-primary transition-colors"
+                  />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Project Description</label>
-                  <Textarea name="description" required placeholder="Tell us briefly about what you want to achieve..." className="min-h-[120px]" />
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Business / Brand Name</label>
+                  <Input 
+                    name="businessName" 
+                    placeholder="e.g. Apex Global Corp" 
+                    className="h-12 rounded-xl bg-muted/40 border-border/80 focus:border-primary transition-colors"
+                  />
                 </div>
 
-                <div className="pt-4">
-                  <Button type="submit" size="lg" className="w-full text-lg h-14" disabled={status === "submitting"}>
-                    {status === "submitting" ? "Sending Request..." : "Start Your Project"}
-                  </Button>
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Email Address *</label>
+                  <Input 
+                    name="email" 
+                    required 
+                    type="email" 
+                    placeholder="alex@company.com" 
+                    className="h-12 rounded-xl bg-muted/40 border-border/80 focus:border-primary transition-colors"
+                  />
                 </div>
-              </form>
-            )}
-          </CardContent>
-        </Card>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">WhatsApp / Phone Number *</label>
+                  <Input 
+                    name="phone" 
+                    required 
+                    type="tel" 
+                    placeholder="+234..." 
+                    className="h-12 rounded-xl bg-muted/40 border-border/80 focus:border-primary transition-colors"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Type of Web Project</label>
+                  <select 
+                    name="websiteType" 
+                    className="flex h-12 w-full rounded-xl border border-border/80 bg-muted/40 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary transition-colors"
+                  >
+                    <option value="" className="bg-background">Select project category...</option>
+                    <option value="business" className="bg-background">Business & Lead Generation Site</option>
+                    <option value="ecommerce" className="bg-background">E-Commerce Store & Payments</option>
+                    <option value="custom" className="bg-background">Custom Web Application / Portal</option>
+                    <option value="training" className="bg-background">1-on-1 Engineering Mentorship</option>
+                    <option value="redesign" className="bg-background">Redesign & Modernization</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Target Budget</label>
+                  <select 
+                    name="budget" 
+                    className="flex h-12 w-full rounded-xl border border-border/80 bg-muted/40 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:border-primary transition-colors"
+                  >
+                    <option value="" className="bg-background">Select investment tier...</option>
+                    <option value="150k" className="bg-background">Starter Package (₦150,000)</option>
+                    <option value="350k" className="bg-background">Business Growth (₦350,000)</option>
+                    <option value="650k_plus" className="bg-background">E-Commerce / Enterprise (₦650,000+)</option>
+                    <option value="custom" className="bg-background">Custom / To Be Decided</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-mono uppercase tracking-wider text-muted-foreground">Project Scope & Objectives *</label>
+                <Textarea 
+                  name="description" 
+                  required 
+                  placeholder="Share details about what you want your website to accomplish, target audience, preferred pages, or special features..." 
+                  className="min-h-[130px] rounded-xl bg-muted/40 border-border/80 focus:border-primary transition-colors leading-relaxed" 
+                />
+              </div>
+
+              {status === "error" && (
+                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-sm">
+                  Failed to send inquiry. Please try again or message us directly on WhatsApp.
+                </div>
+              )}
+
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>Strict confidentiality • 100% NDA Protection</span>
+                </div>
+
+                <Button 
+                  type="submit" 
+                  size="lg" 
+                  className="w-full sm:w-auto rounded-full px-8 py-6 text-base font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-[0_0_25px_rgba(217,70,239,0.3)] hover:shadow-[0_0_35px_rgba(217,70,239,0.5)] transition-all duration-300 border-none" 
+                  disabled={status === "submitting"}
+                >
+                  <span className="flex items-center gap-2">
+                    {status === "submitting" ? "Sending Specs..." : "Submit Project Specs"}
+                    <Send className="w-4 h-4" />
+                  </span>
+                </Button>
+              </div>
+            </form>
+          )}
+        </div>
       </div>
     </Section>
   )
