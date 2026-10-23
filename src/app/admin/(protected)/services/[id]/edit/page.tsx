@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditServicePage({ params }: { params: { id: string } }) {
+export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const service = await prisma.service.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!service) {
@@ -19,7 +20,7 @@ export default async function EditServicePage({ params }: { params: { id: string
   // Server Action inline to handle the update
   const handleUpdate = async (formData: FormData) => {
     "use server"
-    await updateService(params.id, {
+    await updateService(id, {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       price: formData.get("price") ? parseFloat(formData.get("price") as string) : undefined,

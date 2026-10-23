@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditBlogPage({ params }: { params: { id: string } }) {
+export default async function EditBlogPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const post = await prisma.blogPost.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!post) {
@@ -22,7 +23,7 @@ export default async function EditBlogPage({ params }: { params: { id: string } 
     const tagsText = formData.get("tags") as string
     const tags = tagsText.split(',').map(t => t.trim()).filter(t => t !== '')
 
-    await updateBlogPost(params.id, {
+    await updateBlogPost(id, {
       title: formData.get("title") as string,
       content: formData.get("content") as string,
       excerpt: formData.get("excerpt") as string,

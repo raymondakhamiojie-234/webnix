@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditPricingPage({ params }: { params: { id: string } }) {
+export default async function EditPricingPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const pkg = await prisma.pricingPackage.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!pkg) {
@@ -22,7 +23,7 @@ export default async function EditPricingPage({ params }: { params: { id: string
     const featuresText = formData.get("features") as string
     const features = featuresText.split('\n').filter(f => f.trim() !== '')
 
-    await updatePricing(params.id, {
+    await updatePricing(id, {
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       price: formData.get("price") ? parseFloat(formData.get("price") as string) : undefined,

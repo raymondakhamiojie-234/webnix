@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditTestimonialPage({ params }: { params: { id: string } }) {
+export default async function EditTestimonialPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const testimonial = await prisma.testimonial.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!testimonial) {
@@ -19,7 +20,7 @@ export default async function EditTestimonialPage({ params }: { params: { id: st
   const handleUpdate = async (formData: FormData) => {
     "use server"
     
-    await updateTestimonial(params.id, {
+    await updateTestimonial(id, {
       customerName: formData.get("customerName") as string,
       company: formData.get("company") as string,
       content: formData.get("content") as string,

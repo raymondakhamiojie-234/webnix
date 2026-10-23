@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditPortfolioPage({ params }: { params: { id: string } }) {
+export default async function EditPortfolioPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const project = await prisma.portfolioProject.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!project) {
@@ -22,7 +23,7 @@ export default async function EditPortfolioPage({ params }: { params: { id: stri
     const techsText = formData.get("technologies") as string
     const technologies = techsText.split(',').map(t => t.trim()).filter(t => t !== '')
 
-    await updatePortfolio(params.id, {
+    await updatePortfolio(id, {
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       category: formData.get("category") as string,

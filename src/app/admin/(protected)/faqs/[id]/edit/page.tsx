@@ -7,9 +7,10 @@ import prisma from "@/lib/db"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
-export default async function EditFaqPage({ params }: { params: { id: string } }) {
+export default async function EditFaqPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const faq = await prisma.fAQ.findUnique({
-    where: { id: params.id }
+    where: { id }
   })
 
   if (!faq) {
@@ -19,7 +20,7 @@ export default async function EditFaqPage({ params }: { params: { id: string } }
   const handleUpdate = async (formData: FormData) => {
     "use server"
     
-    await updateFaq(params.id, {
+    await updateFaq(id, {
       question: formData.get("question") as string,
       answer: formData.get("answer") as string,
       isActive: formData.get("isActive") === "true",
