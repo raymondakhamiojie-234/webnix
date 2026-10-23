@@ -7,11 +7,16 @@ dotenv.config()
 const prisma = new PrismaClient()
 
 async function main() {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@webnix.com'
+  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@webnix.com').trim().toLowerCase()
   const adminPassword = process.env.ADMIN_PASSWORD || 'securepassword123'
 
-  const existingAdmin = await prisma.user.findUnique({
-    where: { email: adminEmail },
+  const existingAdmin = await prisma.user.findFirst({
+    where: {
+      email: {
+        equals: adminEmail,
+        mode: 'insensitive'
+      }
+    },
   })
 
   if (!existingAdmin) {
