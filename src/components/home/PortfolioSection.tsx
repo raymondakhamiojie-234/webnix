@@ -1,8 +1,19 @@
 import { Section } from "@/components/ui/section"
-import { ExternalLink, Sparkles, Laptop, Layers } from "lucide-react"
+import { ExternalLink, Layers, Laptop } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
+import prisma from "@/lib/db"
 
-const projects = [
+const gradients = [
+  "from-purple-900/50 via-slate-900 to-slate-950",
+  "from-pink-900/50 via-slate-900 to-slate-950",
+  "from-blue-900/50 via-slate-900 to-slate-950",
+  "from-amber-900/40 via-slate-900 to-slate-950",
+  "from-emerald-900/40 via-slate-900 to-slate-950",
+  "from-fuchsia-900/40 via-slate-900 to-slate-950",
+]
+
+const defaultProjects = [
   {
     name: "Apex Luxury Real Estate",
     category: "Corporate Web App",
@@ -10,6 +21,7 @@ const projects = [
     gradient: "from-purple-900/50 via-slate-900 to-slate-950",
     tags: ["Next.js", "TypeScript", "Tailwind", "PostgreSQL"],
     stats: "+240% Lead Rate",
+    projectUrl: "#contact",
   },
   {
     name: "Nova Fashion Boutique",
@@ -18,6 +30,7 @@ const projects = [
     gradient: "from-pink-900/50 via-slate-900 to-slate-950",
     tags: ["E-Commerce", "Stripe API", "Paystack", "Inventory CMS"],
     stats: "0.4s Fast Checkout",
+    projectUrl: "#contact",
   },
   {
     name: "FinPulse Analytics SaaS",
@@ -26,6 +39,7 @@ const projects = [
     gradient: "from-blue-900/50 via-slate-900 to-slate-950",
     tags: ["React 19", "Recharts", "Prisma ORM", "Auth.js"],
     stats: "Realtime Analytics",
+    projectUrl: "#contact",
   },
   {
     name: "Zest Culinary & Bistro",
@@ -34,6 +48,7 @@ const projects = [
     gradient: "from-amber-900/40 via-slate-900 to-slate-950",
     tags: ["Framer Motion", "Table Reservations", "SEO"],
     stats: "Top #1 Google Rank",
+    projectUrl: "#contact",
   },
   {
     name: "OmniHealth Medical Center",
@@ -42,6 +57,7 @@ const projects = [
     gradient: "from-emerald-900/40 via-slate-900 to-slate-950",
     tags: ["Telehealth API", "Twilio", "Next.js 16"],
     stats: "15k Monthly Visits",
+    projectUrl: "#contact",
   },
   {
     name: "Nexus Venture Studio",
@@ -50,10 +66,34 @@ const projects = [
     gradient: "from-fuchsia-900/40 via-slate-900 to-slate-950",
     tags: ["3D Interactive", "Tailwind", "NextAuth"],
     stats: "Featured Design",
+    projectUrl: "#contact",
   }
 ]
 
-export function PortfolioSection() {
+export async function PortfolioSection() {
+  let dbProjects: any[] = []
+  try {
+    dbProjects = await prisma.portfolioProject.findMany({
+      orderBy: { createdAt: 'desc' }
+    })
+  } catch (error) {
+    console.error("Database connection failed for portfolio projects on homepage:", error)
+  }
+
+  const projectsToDisplay = dbProjects.length > 0
+    ? dbProjects.map((p, idx) => ({
+        id: p.id,
+        name: p.name,
+        category: p.category,
+        description: p.description,
+        featuredImg: p.featuredImg,
+        projectUrl: p.projectUrl || "#contact",
+        gradient: gradients[idx % gradients.length],
+        tags: Array.isArray(p.technologies) && p.technologies.length > 0 ? p.technologies : ["Next.js", "Tailwind"],
+        stats: p.clientName ? `Client: ${p.clientName}` : "Bespoke Build"
+      }))
+    : defaultProjects
+
   return (
     <Section id="portfolio" className="relative z-10">
       <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
@@ -72,28 +112,41 @@ export function PortfolioSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {projects.map((project, index) => (
+        {projectsToDisplay.map((project: any, index: number) => (
           <div 
-            key={index} 
+            key={project.id || index} 
             className="group bento-card flex flex-col justify-between overflow-hidden transition-all duration-300"
           >
             {/* Visual Device / Browser Mockup Area */}
-            <div className={`aspect-[16/10] w-full bg-gradient-to-br ${project.gradient} p-6 relative flex flex-col justify-between overflow-hidden border-b border-border/60`}>
-              {/* Browser bar */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-white/30" />
+            <div className={`aspect-[16/10] w-full bg-gradient-to-br ${project.gradient || "from-slate-900 to-black"} p-6 relative flex flex-col justify-between overflow-hidden border-b border-border/60`}>
+              {/* Optional featured image background */}
+              {project.featuredImg && (
+                <div className="absolute inset-0 z-0">
+                  <Image 
+                    src={project.featuredImg} 
+                    alt={project.name} 
+                    fill 
+                    className="object-cover opacity-60 group-hover:scale-105 group-hover:opacity-80 transition-all duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
                 </div>
-                <span className="text-[10px] font-mono text-white/50 bg-black/40 px-2 py-0.5 rounded-md">
-                  https://preview.webnix.dev
+              )}
+
+              {/* Browser bar */}
+              <div className="flex items-center justify-between relative z-10">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/40" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-white/40" />
+                </div>
+                <span className="text-[10px] font-mono text-white/70 bg-black/50 px-2 py-0.5 rounded-md backdrop-blur-md">
+                  preview.webnix.dev
                 </span>
               </div>
 
               {/* Center graphic highlight */}
-              <div className="text-center py-4">
-                <h4 className="text-xl font-bold text-white tracking-tight font-space group-hover:scale-105 transition-transform duration-300">
+              <div className="text-center py-4 relative z-10">
+                <h4 className="text-xl font-bold text-white tracking-tight font-space group-hover:scale-105 transition-transform duration-300 drop-shadow-md">
                   {project.name}
                 </h4>
                 <span className="inline-block mt-2 text-xs font-mono px-3 py-1 rounded-full bg-white/10 text-white/90 backdrop-blur-md border border-white/20">
@@ -102,7 +155,7 @@ export function PortfolioSection() {
               </div>
 
               {/* Bottom mockup bar */}
-              <div className="h-1.5 w-1/3 mx-auto rounded-full bg-white/20" />
+              <div className="h-1.5 w-1/3 mx-auto rounded-full bg-white/20 relative z-10" />
             </div>
 
             {/* Content Details */}
@@ -114,7 +167,7 @@ export function PortfolioSection() {
                   </span>
                 </div>
                 
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
                   {project.description}
                 </p>
               </div>
@@ -122,7 +175,7 @@ export function PortfolioSection() {
               {/* Tags & Action */}
               <div className="pt-4 border-t border-border/50 flex items-center justify-between gap-2">
                 <div className="flex flex-wrap gap-1.5">
-                  {project.tags.slice(0, 3).map((tag, tIndex) => (
+                  {project.tags.slice(0, 3).map((tag: string, tIndex: number) => (
                     <span key={tIndex} className="text-[11px] font-mono px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/40">
                       {tag}
                     </span>
@@ -130,9 +183,10 @@ export function PortfolioSection() {
                 </div>
 
                 <Link 
-                  href="#contact" 
+                  href={project.projectUrl || "#contact"} 
+                  target={project.projectUrl?.startsWith("http") ? "_blank" : undefined}
                   className="p-2 rounded-xl bg-muted/80 hover:bg-primary hover:text-white text-muted-foreground transition-all duration-200 group-hover:scale-110"
-                  title="Discuss similar project"
+                  title="View project details"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </Link>

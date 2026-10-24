@@ -27,12 +27,14 @@ export default function NewPortfolioPage() {
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       category: formData.get("category") as string,
+      featuredImg: (formData.get("featuredImg") as string) || undefined,
       clientName: formData.get("clientName") as string,
       projectUrl: formData.get("projectUrl") as string,
       technologies,
       isFeatured: formData.get("isFeatured") === "true",
     })
 
+    router.refresh()
     router.push("/admin/portfolio")
   }
 
@@ -78,6 +80,11 @@ export default function NewPortfolioPage() {
               </div>
             </div>
             
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Image URL / Screenshot (Optional)</label>
+              <Input name="featuredImg" placeholder="https://images.unsplash.com/... or paste image URL" />
+            </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Technologies (comma separated)</label>
               <Input name="technologies" required placeholder="React, Next.js, Tailwind CSS" />

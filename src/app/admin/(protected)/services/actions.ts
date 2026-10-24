@@ -14,6 +14,8 @@ export async function createService(data: {
     data
   })
   revalidatePath("/admin/services")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function updateService(id: string, data: {
@@ -29,6 +31,8 @@ export async function updateService(id: string, data: {
     data
   })
   revalidatePath("/admin/services")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function deleteService(id: string) {
@@ -36,4 +40,6 @@ export async function deleteService(id: string) {
     where: { id }
   })
   revalidatePath("/admin/services")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }

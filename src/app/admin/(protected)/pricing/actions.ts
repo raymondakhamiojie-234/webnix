@@ -16,6 +16,8 @@ export async function createPricing(data: {
     data
   })
   revalidatePath("/admin/pricing")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function updatePricing(id: string, data: {
@@ -33,6 +35,8 @@ export async function updatePricing(id: string, data: {
     data
   })
   revalidatePath("/admin/pricing")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function deletePricing(id: string) {
@@ -40,4 +44,6 @@ export async function deletePricing(id: string) {
     where: { id }
   })
   revalidatePath("/admin/pricing")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }

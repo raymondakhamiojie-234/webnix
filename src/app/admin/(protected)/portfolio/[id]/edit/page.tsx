@@ -27,6 +27,7 @@ export default async function EditPortfolioPage({ params }: { params: Promise<{ 
       name: formData.get("name") as string,
       description: formData.get("description") as string,
       category: formData.get("category") as string,
+      featuredImg: (formData.get("featuredImg") as string) || undefined,
       clientName: formData.get("clientName") as string,
       projectUrl: formData.get("projectUrl") as string,
       technologies,
@@ -77,6 +78,11 @@ export default async function EditPortfolioPage({ params }: { params: Promise<{ 
               </div>
             </div>
             
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Image URL / Screenshot (Optional)</label>
+              <Input name="featuredImg" placeholder="https://..." defaultValue={project.featuredImg || ""} />
+            </div>
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Technologies (comma separated)</label>
               <Input name="technologies" required defaultValue={project.technologies.join(', ')} />

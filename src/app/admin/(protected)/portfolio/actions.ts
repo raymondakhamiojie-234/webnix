@@ -17,6 +17,8 @@ export async function createPortfolio(data: {
     data
   })
   revalidatePath("/admin/portfolio")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function updatePortfolio(id: string, data: {
@@ -34,6 +36,8 @@ export async function updatePortfolio(id: string, data: {
     data
   })
   revalidatePath("/admin/portfolio")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
 
 export async function deletePortfolio(id: string) {
@@ -41,4 +45,6 @@ export async function deletePortfolio(id: string) {
     where: { id }
   })
   revalidatePath("/admin/portfolio")
+  revalidatePath("/admin")
+  revalidatePath("/")
 }
